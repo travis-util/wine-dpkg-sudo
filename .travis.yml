@@ -1,16 +1,10 @@
 sudo: required
-addons:
-  apt:
-    sources:
-    # - ubuntu-toolchain-r-test
-    # - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/'
-    #   key_url: 'https://dl.winehq.org/wine-builds/Release.key'
-    # - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ trusty main'
-    #  key_url: 'https://dl.winehq.org/wine-builds/Release.key'
-    packages:
-    # - wine #
-    # - gcc-4.9
-    # as requested by configure
+env:
+  matrix:
+  - WINEHQ_VERSION=winehq-stable
+matrix:
+  allow_failures:
+  # - env: GLIB=glib-2.54.2 GLIB_VERSION=2.54
 before_install:
 - apt-cache policy wine
 install:
@@ -19,7 +13,7 @@ install:
 - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
 - cat /etc/apt/sources.list
 - sudo apt-get update
-- sudo apt-get install --install-recommends winehq-stable
+- sudo apt-get install --install-recommends $WINEHQ_VERSION
 script:
-- apt-cache policy wine winehq-stable
+- apt-cache policy wine $WINEHQ_VERSION
 - true
