@@ -4,9 +4,6 @@ env:
   - WINEHQ_VERSION=winehq-stable
   - WINEHQ_VERSION=winehq-staging
   - WINEHQ_VERSION=winehq-devel
-matrix:
-  allow_failures:
-  # - env: GLIB=glib-2.54.2 GLIB_VERSION=2.54
 before_install:
 - apt-cache policy wine
 - wget -nc https://dl.winehq.org/wine-builds/Release.key
@@ -17,4 +14,3 @@ before_install:
 - sudo apt-get install --install-recommends $WINEHQ_VERSION
 script:
 - apt-cache policy wine $WINEHQ_VERSION
-- true
