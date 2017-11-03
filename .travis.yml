@@ -2,6 +2,8 @@ sudo: required
 env:
   matrix:
   - WINEHQ_VERSION=winehq-stable
+  - WINEHQ_VERSION=winehq-devel
+  - WINEHQ_VERSION=winehq-staging
 matrix:
   allow_failures:
   # - env: GLIB=glib-2.54.2 GLIB_VERSION=2.54
