@@ -1,0 +1,18 @@
+sudo: required
+addons:
+  apt:
+    sources:
+    # - ubuntu-toolchain-r-test
+    # - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/'
+    #   key_url: 'https://dl.winehq.org/wine-builds/Release.key'
+    # - sourceline: 'deb https://dl.winehq.org/wine-builds/ubuntu/ trusty main'
+    #  key_url: 'https://dl.winehq.org/wine-builds/Release.key'
+    packages:
+    # - wine #
+    # - gcc-4.9
+    # as requested by configure
+before_install:
+- apt-cache policy wine
+script:
+- apt-cache policy wine
+- true
