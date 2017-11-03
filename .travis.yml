@@ -6,6 +6,7 @@ env:
   - WINEHQ_VERSION=winehq-devel
 before_install:
 - apt-cache policy wine
+- sudo dpkg --add-architecture i386
 - wget -nc https://dl.winehq.org/wine-builds/Release.key
 - sudo apt-key add Release.key
 - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
