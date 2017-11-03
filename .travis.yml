@@ -7,7 +7,7 @@ env:
 before_install:
 - apt-cache policy wine
 - sudo dpkg --add-architecture i386
-- curl https://dl.winehq.org/wine-builds/Release.key | sudo apt-key add
+- curl https://dl.winehq.org/wine-builds/Release.key | sudo apt-key add -
 - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
 - cat /etc/apt/sources.list
 - sudo apt-get update
