@@ -13,6 +13,10 @@ addons:
     # as requested by configure
 before_install:
 - apt-cache policy wine
+install:
+- wget -nc https://dl.winehq.org/wine-builds/Release.key
+- sudo apt-key add Release.key
+- sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
 script:
 - apt-cache policy wine
 - true
