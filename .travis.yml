@@ -5,12 +5,78 @@ env:
   - WINEHQ_VERSION=winehq-staging
   - WINEHQ_VERSION=winehq-devel
 before_install:
-- apt-cache policy wine
+# - apt-cache policy wine
 - sudo dpkg --add-architecture i386
 - curl https://dl.winehq.org/wine-builds/Release.key | sudo apt-key add -
 - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
 - cat /etc/apt/sources.list
 - sudo apt-get update
 - sudo apt-get install --install-recommends $WINEHQ_VERSION
+
+- install --directory ~/.wine/drive_c/windows
+- install --directory ~/.wine/dosdevices
+- pushd ~/.wine/dosdevices
+- ln -s ../drive_c 'c:'
+- ln -s / 'z:'
+- ls -l --color
+- popd
+- wine wineboot
+- wine cmd.exe /C dir
+- wine cmd.exe /C dir C:\\
+- wine cmd.exe /C dir Z:\\
+- wine cmd.exe /C dir "%HOMEDRIVE%%HOMEPATH%"
+
+- wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+- wine nuget.exe
+
+# Tentative to download PowerShell using unzip or 7z
+
+# - wget http://www.7-zip.org/a/7z1604-x64.exe
+# - wine 7z1604-x64.exe # Seems to need graphical display.
+
+# Commented out to spped up
+# - wget https://downloads.sourceforge.net/project/sevenzip/7-Zip/9.20/7za920.zip # Popular old version
+# - unzip 7za*.zip
+# - cat readme.txt
+# - wine 7za.exe
+# - wget https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-rc.2/PowerShell-6.0.0-rc.2-win-x64.zip
+# - wine 7za.exe t PowerShell*
+# - wine 7za.exe l PowerShell*
+
+# - wine 7za.exe x PowerShell* # can not open output file
+# unzip had also an error for \ Windows style dirrectory separator
+
+- wget http://windows.php.net/downloads/releases/php-7.2.0-nts-Win32-VC15-x64.zip
+- unzip php*
+- wine php.exe --ini
+- find . -name php.ini-production
+# PHP is not configured and, for instance, SSL is not working, this should be done in php.ini
+- echo extension_dir = "ext" >> php.ini
+- echo extension=openssl >> php.ini
+- echo extension=mbstring >> php.ini
+- find . -name php_openssl.dll
+- wine php.exe --ini
+- wine php.exe --help
+- wine php.exe -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+## Warning: copy(): Unable to find the wrapper "https" - did you forget to enable it when you configured PHP?
+#- wget https://getcomposer.org/installer --output-document=composer-setup.php
+- wine php.exe -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+- wine php.exe composer-setup.php
+## Some settings on your machine make Composer unable to work properly.
+# Make sure that you fix the issues listed below and run this script again:
+# The openssl extension is missing, which means that secure HTTPS transfers are impossible.
+# If possible you should enable it or recompile php with --with-openssl
+- wine php.exe -r "unlink('composer-setup.php');"
+# - wget https://getcomposer.org/composer.phar
+- wine php.exe composer.phar
+# - wine php.exe -c php.ini composer.phar require symfony/lts
+- wine php.exe -c php.ini composer.phar require phpunit/phpunit
+- ls --color
+- cat composer.json
+- file vendor/bin/phpunit
+- cat vendor/bin/phpunit
+- wine php.exe -c php.ini "vendor\phpunit\phpunit\phpunit" --version
+- wine php.exe -c php.ini "vendor\phpunit\phpunit\phpunit" --help
 script:
-- apt-cache policy wine $WINEHQ_VERSION
+- true
+# - apt-cache policy wine $WINEHQ_VERSION
