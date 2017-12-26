@@ -28,7 +28,7 @@ before_install:
 - ls -l --color ~/.wine/dosdevices
 
 - wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-- wine nuget.exe
+# - wine nuget.exe # Requires missing mono.
 
 # Tentative to download PowerShell using unzip or 7z
 
@@ -59,19 +59,13 @@ before_install:
 - wine php.exe --ini
 - wine php.exe --help
 - wine php.exe -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-## Warning: copy(): Unable to find the wrapper "https" - did you forget to enable it when you configured PHP?
-#- wget https://getcomposer.org/installer --output-document=composer-setup.php
-- wine php.exe -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+# - wine php.exe -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
 - wine php.exe composer-setup.php
-## Some settings on your machine make Composer unable to work properly.
-# Make sure that you fix the issues listed below and run this script again:
-# The openssl extension is missing, which means that secure HTTPS transfers are impossible.
-# If possible you should enable it or recompile php with --with-openssl
 - wine php.exe -r "unlink('composer-setup.php');"
-# - wget https://getcomposer.org/composer.phar
 - wine php.exe composer.phar
 # - wine php.exe -c php.ini composer.phar require symfony/lts
-- wine php.exe -c php.ini composer.phar require phpunit/phpunit
+# - wine php.exe -c php.ini composer.phar require phpunit/phpunit
+- wine php.exe composer.phar require phpunit/phpunit
 - ls --color
 - cat composer.json
 - file vendor/bin/phpunit
