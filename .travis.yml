@@ -27,7 +27,7 @@ before_install:
 - wine cmd.exe /C dir "%HOMEDRIVE%%HOMEPATH%"
 - ls -l --color ~/.wine/dosdevices
 
-- wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+# - wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 # - wine nuget.exe # Requires missing mono.
 
 # Tentative to download PowerShell using unzip or 7z
