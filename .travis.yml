@@ -20,7 +20,7 @@ before_install:
 - ln -s / 'z:'
 - ls -l --color
 - popd
-- wine wineboot
+- wine wineboot --init
 - wine cmd.exe /C dir
 - wine cmd.exe /C dir C:\\
 - wine cmd.exe /C dir Z:\\
