@@ -48,9 +48,16 @@ before_install:
 # unzip had also an error for \ Windows style dirrectory separator
 
 
+- git clone git://github.com/php/php-src.git
+- pushd php-src
+- php_version=$(git for-each-ref --count=1 --sort=-taggerdate --format '%(tag)' 'refs/tags/php-7.2.*')
+- popd
+- php_zip=${php_version}-nts-Win32-VC15-x64.zip
+- wget --quiet https://windows.php.net/downloads/releases/$php_zip
+- unzip $php_zip
+# - wget http://windows.php.net/downloads/releases/php-7.2.5-nts-Win32-VC15-x64.zip
+# - unzip php*
 
-- wget http://windows.php.net/downloads/releases/php-7.2.5-nts-Win32-VC15-x64.zip
-- unzip php*
 - wine php.exe --ini
 - find . -name php.ini-production
 # PHP is not configured and, for instance, SSL is not working, this should be done in php.ini
@@ -74,6 +81,13 @@ before_install:
 - cat vendor/bin/phpunit
 - wine php.exe -c php.ini "vendor\phpunit\phpunit\phpunit" --version
 - wine php.exe -c php.ini "vendor\phpunit\phpunit\phpunit" --help
-script:
-- true
+
+script: true
+
+after_script:
+- wine php.exe -c php.ini composer.phar exec -- phpunit --version # Not working!
+- wine php.exe -c php.ini composer.phar exec -- phpunit --help # Not working!
+- wine php.exe -c php.ini composer.phar exec phpunit
+- wine php.exe -c php.ini composer.phar exec -- phpunit
+- wine php.exe -c php.ini composer.phar exec phpunit --
 # - apt-cache policy wine $WINEHQ_VERSION
