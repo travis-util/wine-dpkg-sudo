@@ -47,7 +47,9 @@ before_install:
 # - wine 7za.exe x PowerShell* # can not open output file
 # unzip had also an error for \ Windows style dirrectory separator
 
-- wget http://windows.php.net/downloads/releases/php-7.2.0-nts-Win32-VC15-x64.zip
+
+
+- wget http://windows.php.net/downloads/releases/php-7.2.5-nts-Win32-VC15-x64.zip
 - unzip php*
 - wine php.exe --ini
 - find . -name php.ini-production
