@@ -9,7 +9,6 @@ before_install:
 - sudo dpkg --add-architecture i386
 - curl https://dl.winehq.org/wine-builds/Release.key | sudo apt-key add -
 - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
-- cat /etc/apt/sources.list
 - sudo apt-get update
 - sudo apt-get install --install-recommends $WINEHQ_VERSION
 
@@ -18,14 +17,8 @@ before_install:
 # - pushd ~/.wine/dosdevices
 # - ln -s ../drive_c 'c:'
 # - ln -s / 'z:'
-# - ls -l --color
 # - popd
 - wine wineboot --init
-- wine cmd.exe /C dir
-- wine cmd.exe /C dir C:\\
-- wine cmd.exe /C dir Z:\\
-- wine cmd.exe /C dir "%HOMEDRIVE%%HOMEPATH%"
-- ls -l --color ~/.wine/dosdevices
 
 # - wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 # - wine nuget.exe # Requires missing mono.
@@ -55,36 +48,42 @@ before_install:
 - php_zip=${php_version}-nts-Win32-VC15-x64.zip
 - wget --quiet https://windows.php.net/downloads/releases/$php_zip
 - unzip $php_zip
-# - wget http://windows.php.net/downloads/releases/php-7.2.5-nts-Win32-VC15-x64.zip
-# - unzip php*
 
-- wine php.exe --ini
-- find . -name php.ini-production
 # PHP is not configured and, for instance, SSL is not working, this should be done in php.ini
 - echo extension_dir = "ext" >> php.ini
 - echo extension=openssl >> php.ini
 - echo extension=mbstring >> php.ini
+
+- wine php.exe -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+- wine php.exe -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+- wine php.exe composer-setup.php
+- wine php.exe -r "unlink('composer-setup.php');"
+
+- wine php.exe composer.phar require phpunit/phpunit
+
+script: true
+
+after_script:
+- cat /etc/apt/sources.list
+- wine cmd.exe /C dir
+- wine cmd.exe /C dir C:\\
+- wine cmd.exe /C dir Z:\\
+- wine cmd.exe /C dir "%HOMEDRIVE%%HOMEPATH%"
+- ls -l --color ~/.wine/dosdevices
+- wine php.exe --ini
+- find . -name php.ini-production
 - find . -name php_openssl.dll
 - wine php.exe --ini
 - wine php.exe --help
-- wine php.exe -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-# - wine php.exe -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-- wine php.exe composer-setup.php
-- wine php.exe -r "unlink('composer-setup.php');"
 - wine php.exe composer.phar
 # - wine php.exe -c php.ini composer.phar require symfony/lts
 # - wine php.exe -c php.ini composer.phar require phpunit/phpunit
-- wine php.exe composer.phar require phpunit/phpunit
 - ls --color
 - cat composer.json
 - file vendor/bin/phpunit
 - cat vendor/bin/phpunit
 - wine php.exe -c php.ini "vendor\phpunit\phpunit\phpunit" --version
 - wine php.exe -c php.ini "vendor\phpunit\phpunit\phpunit" --help
-
-script: true
-
-after_script:
 - wine php.exe -c php.ini composer.phar exec -- phpunit --version # Not working!
 - wine php.exe -c php.ini composer.phar exec -- phpunit --help # Not working!
 - wine php.exe -c php.ini composer.phar exec phpunit
