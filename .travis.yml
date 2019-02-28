@@ -10,7 +10,7 @@ before_install:
 - curl https://dl.winehq.org/wine-builds/Release.key | sudo apt-key add -
 - sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
 - sudo apt-get update
-- sudo apt-get install --install-recommends $WINEHQ_VERSION
+- sudo apt-get install --install-recommends --allow-unauthenticated $WINEHQ_VERSION # --allow-unauthenticated !!!!!!!!!!!!!!
 
 # - install --directory ~/.wine/drive_c/windows
 # - install --directory ~/.wine/dosdevices
