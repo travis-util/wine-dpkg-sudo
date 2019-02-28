@@ -43,7 +43,8 @@ before_install:
 
 - git clone git://github.com/php/php-src.git
 - pushd php-src
-- php_version=$(git for-each-ref --count=1 --sort=-taggerdate --format '%(tag)' 'refs/tags/php-7.2.*')
+# - php_version=$(git for-each-ref --count=1 --sort=-taggerdate --format '%(tag)' 'refs/tags/php-7.2.*')
+- php_version=$(git for-each-ref --count=1 --sort=-taggerdate --format '%(tag)' 'refs/tags/php-7.3.*')
 - popd
 - php_zip=${php_version}-nts-Win32-VC15-x64.zip
 - wget --quiet https://windows.php.net/downloads/releases/$php_zip
